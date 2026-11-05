@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>React Interview Questions and Answers</title>
+<meta name="description" content="A practical revision guide for React frontend interviews. Basic to advanced, with short answers and code snippets.">
+<style>
+:root{
+  --bg:#ffffff; --ink:#1f2328; --muted:#59636e; --line:#d8dee4; --soft:#f6f8fa;
+  --link:#0969da; --code-bg:#f6f8fa; --code-ink:#1f2328; --inline:#eff1f3; --ok:#1a7f37;
+  --font:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+  --mono:ui-monospace,"SF Mono",Consolas,"Liberation Mono",Menlo,monospace;
+}
+:root[data-theme="dark"]{
+  --bg:#0d1117; --ink:#e6edf3; --muted:#9198a1; --line:#30363d; --soft:#161b22;
+  --link:#4493f8; --code-bg:#161b22; --code-ink:#e6edf3; --inline:#262c36; --ok:#3fb950;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0d1117; --ink:#e6edf3; --muted:#9198a1; --line:#30363d; --soft:#161b22;
+    --link:#4493f8; --code-bg:#161b22; --code-ink:#e6edf3; --inline:#262c36; --ok:#3fb950;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:16px}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font);font-size:16px;line-height:1.7;-webkit-font-smoothing:antialiased}
+a{color:var(--link);text-decoration:none}
+a:hover{text-decoration:underline}
+#bar{display:none}
+
+.tools{position:fixed;top:10px;right:12px;z-index:40;display:flex;gap:6px}
+.btn{border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:6px;padding:4px 10px;font:inherit;font-size:13px;cursor:pointer}
+.btn:hover{background:var(--soft)}
+.btn.on{background:var(--soft);border-color:var(--link);color:var(--link)}
+
+main{display:grid;grid-template-columns:270px minmax(0,1fr);max-width:1120px;margin:0 auto}
+.toc{position:sticky;top:0;align-self:start;height:100vh;overflow-y:auto;padding:24px 16px 24px 20px;border-right:1px solid var(--line);font-size:14px;line-height:1.45}
+.toc b{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:0 0 8px}
+.toc ul{list-style:none;margin:0 0 14px;padding:0}
+.toc .toc-sec{display:block;font-weight:600;color:var(--ink);margin:12px 0 4px}
+.toc li a{display:block;padding:2px 0 2px 10px;color:var(--muted);border-left:2px solid transparent}
+.toc li a:hover{color:var(--link);text-decoration:none;border-left-color:var(--link)}
+
+.book{padding:28px 40px 40px;max-width:820px;min-width:0}
+.hero{padding-bottom:16px;border-bottom:1px solid var(--line)}
+h1{font-size:2rem;line-height:1.25;margin:0 0 8px;font-weight:700}
+.lead{margin:0 0 14px;color:var(--muted)}
+.progress-box{max-width:320px}
+.progress-top{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
+.progress-top b{color:var(--ink);font-weight:600}
+.track{height:4px;background:var(--line);border-radius:2px;overflow:hidden}
+#pfill{height:100%;width:0;background:var(--ok);transition:width .2s}
+
+h2{font-size:1.4rem;line-height:1.3;margin:0 0 8px;font-weight:650}
+.intro{padding:18px 0 4px}
+.end{display:grid;grid-template-columns:1fr 1fr;gap:28px;padding:18px 0}
+.intro h2,.end h2{font-size:1.05rem;margin-bottom:6px}
+.steps{margin:0;padding-left:20px;font-size:15px}
+.steps li{margin:3px 0}
+.road{list-style:none;padding:0;margin:0;font-size:15px}
+.road a{display:block;padding:1px 0}
+.road small{color:var(--muted);margin-left:4px}
+.tip{margin:0 0 8px;padding:8px 14px;border-left:3px solid var(--line);background:var(--soft);font-size:15px}
+.inline-toc{display:none}
+
+.sec{margin-top:36px}
+.sec-head{display:flex;align-items:baseline;gap:10px;margin-bottom:4px;padding-bottom:6px;border-bottom:1px solid var(--line)}
+.sec-head h2{margin:0;flex:1 1 auto}
+.sec-count{color:var(--muted);font-size:.85rem}
+
+.q{padding:18px 0 4px}
+.q header{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.num{flex:none;color:var(--muted);font-weight:600;font-size:1rem}
+.num::before{content:"Q"}
+.q h3{margin:0;flex:1 1 60%;font-size:1.1rem;line-height:1.4;font-weight:600}
+.done{flex:none;display:inline-flex;gap:5px;align-items:center;font-size:12.5px;color:var(--muted);cursor:pointer;user-select:none}
+.done input,.checks input{width:15px;height:15px;accent-color:var(--ok)}
+.q.is-done .num{color:var(--ok)}
+.ans{margin:6px 0 0}
+.ans p{margin:0 0 10px}
+.alist{margin:0 0 10px;padding-left:22px}
+.alist li{margin:3px 0}
+code{font-family:var(--mono);font-size:.875em;background:var(--inline);padding:1px 5px;border-radius:4px;color:var(--ink)}
+.code{position:relative;margin:10px 0 12px}
+.code pre{margin:0;background:var(--code-bg);color:var(--code-ink);border:1px solid var(--line);border-radius:6px;padding:12px 14px;overflow-x:auto;font-size:13.5px;line-height:1.55}
+.code pre code{background:none;color:inherit;padding:0;font-size:inherit}
+.copy{position:absolute;top:6px;right:6px;border:1px solid var(--line);background:var(--bg);color:var(--muted);border-radius:4px;font:inherit;font-size:11.5px;padding:1px 8px;cursor:pointer}
+.copy:hover{color:var(--link);border-color:var(--link)}
+.reveal{display:none;margin-top:6px;border:1px solid var(--line);background:var(--bg);color:var(--link);border-radius:6px;padding:4px 12px;font:inherit;font-size:13.5px;cursor:pointer}
+.reveal:hover{background:var(--soft)}
+body.quiz .q:not(.shown) .ans{display:none}
+body.quiz .q:not(.shown) .reveal{display:inline-block}
+
+.end{border-top:1px solid var(--line);margin-top:32px;padding-top:20px}
+.sub{color:var(--muted);margin:0 0 8px;font-size:14.5px}
+.checks{list-style:none;padding:0;margin:0;font-size:15px}
+.checks li{margin:4px 0}
+.checks label{display:flex;gap:8px;align-items:flex-start;cursor:pointer}
+.checks input{margin-top:5px;flex:none}
+.checks input:checked+span{color:var(--muted)}
+.tasks{margin:0;padding-left:22px;font-size:15px}
+.tasks li{margin:4px 0}
+.senior{margin-top:6px;padding:8px 14px;border-left:3px solid var(--line);background:var(--soft);font-size:15px}
+footer{max-width:1120px;margin:0 auto;padding:16px 20px 40px;color:var(--muted);font-size:13.5px;border-top:1px solid var(--line)}
+#totop{position:fixed;right:14px;bottom:14px;width:34px;height:34px;border-radius:6px;border:1px solid var(--line);background:var(--bg);color:var(--muted);font-size:16px;cursor:pointer;opacity:0;pointer-events:none;transition:opacity .2s}
+#totop.show{opacity:1;pointer-events:auto}
+
+@media (max-width:900px){
+  main{display:block}
+  .toc{display:none}
+  .inline-toc{display:block}
+  .book{padding:56px 16px 30px}
+  .end{grid-template-columns:1fr;gap:16px}
+  h1{font-size:1.6rem}
+}
+@media print{
+  .tools,#totop,.copy,.done,.progress-box,.toc{display:none}
+  main{display:block}
+  body.quiz .q:not(.shown) .ans{display:block}
+  .q{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+<div id="bar" aria-hidden="true"></div>
+<div class="tools">
+  <button id="mode" type="button" class="btn" title="Quiz mode hides answers until you click">Quiz mode</button>
+  <button id="theme" type="button" class="btn" aria-label="Toggle dark mode">Dark</button>
+</div>
+
+<main id="top">
+<nav class="toc" aria-label="Contents"><b>Contents</b><a class="toc-sec" href="#s1">1. React Basics</a><ul><li><a href="#q1">1. What is React?</a></li><li><a href="#q2">2. What are the main features of React?</a></li><li><a href="#q3">3. What is JSX?</a></li><li><a href="#q4">4. What is a component in React?</a></li><li><a href="#q5">5. What is the difference between functional and class components?</a></li><li><a href="#q6">6. What are props in React?</a></li><li><a href="#q7">7. What is state in React?</a></li><li><a href="#q8">8. What is the difference between props and state?</a></li><li><a href="#q9">9. What is the Virtual DOM?</a></li><li><a href="#q10">10. What is one-way data flow in React?</a></li></ul><a class="toc-sec" href="#s2">2. Rendering, Events &amp; Lists</a><ul><li><a href="#q11">11. What is conditional rendering?</a></li><li><a href="#q12">12. How do you render a list in React?</a></li><li><a href="#q13">13. What is the purpose of the key prop?</a></li><li><a href="#q14">14. How do you handle events in React?</a></li><li><a href="#q15">15. What is a controlled component?</a></li><li><a href="#q16">16. What is an uncontrolled component?</a></li><li><a href="#q17">17. What is the difference between onChange and onClick?</a></li></ul><a class="toc-sec" href="#s3">3. React Hooks</a><ul><li><a href="#q18">18. What are React Hooks?</a></li><li><a href="#q19">19. What is useState?</a></li><li><a href="#q20">20. What is useEffect?</a></li><li><a href="#q21">21. What is the dependency array in useEffect?</a></li><li><a href="#q22">22. What is the cleanup function in useEffect?</a></li><li><a href="#q23">23. What is useRef?</a></li><li><a href="#q24">24. What is useMemo?</a></li><li><a href="#q25">25. What is useCallback?</a></li><li><a href="#q26">26. What is useContext?</a></li><li><a href="#q27">27. What are the Rules of Hooks?</a></li></ul><a class="toc-sec" href="#s4">4. State Management &amp; Communication</a><ul><li><a href="#q28">28. What is lifting state up?</a></li><li><a href="#q29">29. What is prop drilling? How can you avoid it?</a></li><li><a href="#q30">30. What is the Context API?</a></li><li><a href="#q31">31. What is Redux?</a></li><li><a href="#q32">32. What is Redux Toolkit?</a></li><li><a href="#q33">33. What is the difference between Context API and Redux?</a></li><li><a href="#q34">34. How do you update an object or array in React state?</a></li></ul><a class="toc-sec" href="#s5">5. APIs, Routing &amp; Error Handling</a><ul><li><a href="#q35">35. How do you call an API in React?</a></li><li><a href="#q36">36. How do you handle loading and error states?</a></li><li><a href="#q37">37. What is React Router?</a></li><li><a href="#q38">38. What is the difference between Link and useNavigate?</a></li><li><a href="#q39">39. What are protected routes?</a></li><li><a href="#q40">40. What are Error Boundaries?</a></li></ul><a class="toc-sec" href="#s6">6. Performance &amp; Advanced React</a><ul><li><a href="#q41">41. What causes a React component to re-render?</a></li><li><a href="#q42">42. What is React.memo?</a></li><li><a href="#q43">43. What is reconciliation in React?</a></li><li><a href="#q44">44. What is code splitting and lazy loading?</a></li><li><a href="#q45">45. What is useReducer?</a></li><li><a href="#q46">46. What are custom Hooks?</a></li><li><a href="#q47">47. What is the difference between CSR, SSR and SSG?</a></li></ul><a class="toc-sec" href="#s7">7. Testing, Security &amp; Real-World Scenarios</a><ul><li><a href="#q48">48. How do you test React components?</a></li><li><a href="#q49">49. How do you prevent security issues in React?</a></li><li><a href="#q50">50. How would you optimize a slow React application?</a></li></ul><a class="toc-sec" href="#s8">8. Core Concepts Often Asked</a><ul><li><a href="#q51">51. Is setState synchronous? What are batching and functional updates?</a></li><li><a href="#q52">52. What is a Fragment in React?</a></li><li><a href="#q53">53. What are synthetic events in React?</a></li><li><a href="#q54">54. What are class component lifecycle methods and their Hooks equivalents?</a></li><li><a href="#q55">55. What is the difference between useEffect and useLayoutEffect?</a></li><li><a href="#q56">56. Why does useEffect run twice in development? What is StrictMode?</a></li><li><a href="#q57">57. What is a stale closure in React Hooks?</a></li><li><a href="#q58">58. What are Higher-Order Components (HOC) and render props?</a></li><li><a href="#q59">59. What are Portals?</a></li><li><a href="#q60">60. What is the children prop? Composition vs inheritance?</a></li></ul><a class="toc-sec" href="#s9">9. Modern React &amp; Practical Scenarios</a><ul><li><a href="#q61">61. How do you pass a ref to a child component?</a></li><li><a href="#q62">62. What is Suspense?</a></li><li><a href="#q63">63. What is concurrent rendering? What are useTransition and useDeferredValue?</a></li><li><a href="#q64">64. What is new in React 18 and React 19?</a></li><li><a href="#q65">65. What is the difference between server state and client state? Why use React Query?</a></li><li><a href="#q66">66. How do you implement a debounced search input?</a></li></ul></nav>
+<div class="book">
+  <section class="hero">
+        <h1>React Interview Questions and Answers</h1>
+    <p class="lead">66 commonly asked React interview questions with short answers and code examples, from the basics to advanced topics.</p>
+    <div class="progress-box">
+      <div class="progress-top"><span>Your progress</span><b id="pcount">0 / 66</b></div>
+      <div class="track"><div id="pfill"></div></div>
+    </div>
+  </section>
+
+  <section class="intro">
+    <div>
+      <h2>How to use this guide</h2>
+      <ol class="steps">
+        <li>Read each answer aloud in your own words.</li>
+        <li>Type the code examples rather than only reading them.</li>
+        <li>Practise explaining why you chose a solution.</li>
+        <li>For senior interviews, add a real project example and trade-offs.</li>
+      </ol>
+    </div>
+    <div class="inline-toc">
+      <h2>Contents</h2>
+      <ul class="road"><li><a href="#s1">1. React Basics <small>Q1–10</small></a></li><li><a href="#s2">2. Rendering, Events &amp; Lists <small>Q11–17</small></a></li><li><a href="#s3">3. React Hooks <small>Q18–27</small></a></li><li><a href="#s4">4. State Management &amp; Communication <small>Q28–34</small></a></li><li><a href="#s5">5. APIs, Routing &amp; Error Handling <small>Q35–40</small></a></li><li><a href="#s6">6. Performance &amp; Advanced React <small>Q41–47</small></a></li><li><a href="#s7">7. Testing, Security &amp; Real-World Scenarios <small>Q48–50</small></a></li><li><a href="#s8">8. Core Concepts Often Asked <small>Q51–60</small></a></li><li><a href="#s9">9. Modern React &amp; Practical Scenarios <small>Q61–66</small></a></li></ul>
+    </div>
+  </section>
+  <p class="tip"><b>Note:</b> You do not need to memorize every sentence. Understand the concept, explain it clearly, and be ready to write a small example.</p>
+
+  <div class="sec" id="s1"><div class="sec-head"><h2>1. React Basics</h2><span class="sec-count">Q1–10</span></div><article class="q" id="q1">
+<header><span class="num">1</span><h3>What is React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="1"><span>I can explain this</span></label></header>
+<div class="ans"><p>React is a JavaScript library used to build user interfaces. It lets us create reusable UI components and efficiently update the screen when data changes.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q2">
+<header><span class="num">2</span><h3>What are the main features of React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="2"><span>I can explain this</span></label></header>
+<div class="ans"><p>Component-based architecture, JSX syntax, one-way data flow, Hooks for state and lifecycle-related logic, and efficient UI updates through reconciliation.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q3">
+<header><span class="num">3</span><h3>What is JSX?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="3"><span>I can explain this</span></label></header>
+<div class="ans"><p>JSX stands for JavaScript XML. It allows us to write HTML-like syntax inside JavaScript. JSX is transformed into JavaScript instructions that React uses to create UI elements.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const element = &lt;h1&gt;Hello React&lt;/h1&gt;;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q4">
+<header><span class="num">4</span><h3>What is a component in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="4"><span>I can explain this</span></label></header>
+<div class="ans"><p>A component is a reusable piece of UI. It can contain markup, logic, and styling.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function Welcome() {
+  return &lt;h1&gt;Welcome!&lt;/h1&gt;;
+}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q5">
+<header><span class="num">5</span><h3>What is the difference between functional and class components?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="5"><span>I can explain this</span></label></header>
+<div class="ans"><p>Functional components are JavaScript functions and can use Hooks. Class components use ES6 classes and lifecycle methods. Modern React development generally prefers functional components.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q6">
+<header><span class="num">6</span><h3>What are props in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="6"><span>I can explain this</span></label></header>
+<div class="ans"><p>Props are inputs passed from a parent component to a child component. They are read-only from the receiving component's perspective.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function Welcome({ name }) {
+  return &lt;h1&gt;Hello, {name}&lt;/h1&gt;;
+}
+
+&lt;Welcome name="Alex" /&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q7">
+<header><span class="num">7</span><h3>What is state in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="7"><span>I can explain this</span></label></header>
+<div class="ans"><p>State is data managed by a component. When state changes through its setter, React can render the component again to display the updated data.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const [count, setCount] = useState(0);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q8">
+<header><span class="num">8</span><h3>What is the difference between props and state?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="8"><span>I can explain this</span></label></header>
+<div class="ans"><p>Props are received from a parent and are read-only to the child. State is managed by a component and updated using a setter or reducer. Props configure components; state manages changing data.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q9">
+<header><span class="num">9</span><h3>What is the Virtual DOM?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="9"><span>I can explain this</span></label></header>
+<div class="ans"><p>The Virtual DOM is a common term for React's in-memory representation of UI. React compares render results and determines what needs to change in the actual DOM.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q10">
+<header><span class="num">10</span><h3>What is one-way data flow in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="10"><span>I can explain this</span></label></header>
+<div class="ans"><p>Data typically flows from parent to child through props. A child can request changes by calling a callback passed by its parent, helping keep data flow predictable.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s2"><div class="sec-head"><h2>2. Rendering, Events &amp; Lists</h2><span class="sec-count">Q11–17</span></div><article class="q" id="q11">
+<header><span class="num">11</span><h3>What is conditional rendering?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="11"><span>I can explain this</span></label></header>
+<div class="ans"><p>Conditional rendering means displaying different UI based on a condition.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>{isLoggedIn ? &lt;Dashboard /&gt; : &lt;Login /&gt;}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q12">
+<header><span class="num">12</span><h3>How do you render a list in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="12"><span>I can explain this</span></label></header>
+<div class="ans"><p>Use JavaScript's <code>map()</code> method to convert an array into elements.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>{users.map(user =&gt; (
+  &lt;p key={user.id}&gt;{user.name}&lt;/p&gt;
+))}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q13">
+<header><span class="num">13</span><h3>What is the purpose of the key prop?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="13"><span>I can explain this</span></label></header>
+<div class="ans"><p>A key helps React identify list items across renders so it can determine which items were added, removed, or changed. Use a stable unique ID rather than an array index when possible.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q14">
+<header><span class="num">14</span><h3>How do you handle events in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="14"><span>I can explain this</span></label></header>
+<div class="ans"><p>React uses event props such as <code>onClick</code> and <code>onChange</code>. Pass a function reference to handle the event. Avoid <code>onClick={handleClick()}</code> when you intend to call the function only after the click.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>&lt;button onClick={handleClick}&gt;Click&lt;/button&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q15">
+<header><span class="num">15</span><h3>What is a controlled component?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="15"><span>I can explain this</span></label></header>
+<div class="ans"><p>A controlled form element gets its value from React state and updates that state through an event handler.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const [name, setName] = useState("");
+
+&lt;input
+  value={name}
+  onChange={e =&gt; setName(e.target.value)}
+/&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q16">
+<header><span class="num">16</span><h3>What is an uncontrolled component?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="16"><span>I can explain this</span></label></header>
+<div class="ans"><p>An uncontrolled form element keeps its current value in the DOM rather than having React state control it. You can access its value with a ref.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const inputRef = useRef(null);
+
+&lt;input ref={inputRef} /&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q17">
+<header><span class="num">17</span><h3>What is the difference between onChange and onClick?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="17"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>onChange</code> handles changes to form values, such as typing into an input. <code>onClick</code> handles click interactions on buttons, links, and other clickable elements.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s3"><div class="sec-head"><h2>3. React Hooks</h2><span class="sec-count">Q18–27</span></div><article class="q" id="q18">
+<header><span class="num">18</span><h3>What are React Hooks?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="18"><span>I can explain this</span></label></header>
+<div class="ans"><p>Hooks are functions that let functional components use React features such as state, context, refs, and effects. Examples include <code>useState</code>, <code>useEffect</code>, and <code>useRef</code>.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q19">
+<header><span class="num">19</span><h3>What is useState?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="19"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useState</code> adds state to a functional component and returns the current value and a setter function.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const [count, setCount] = useState(0);
+
+&lt;button onClick={() =&gt; setCount(c =&gt; c + 1)}&gt;
+  {count}
+&lt;/button&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q20">
+<header><span class="num">20</span><h3>What is useEffect?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="20"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useEffect</code> synchronizes a component with external systems, such as APIs, subscriptions, or browser event listeners.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>useEffect(() =&gt; {
+  document.title = "Dashboard";
+}, []);
+
+// In development Strict Mode, React may run an extra
+// setup-and-cleanup cycle.</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q21">
+<header><span class="num">21</span><h3>What is the dependency array in useEffect?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="21"><span>I can explain this</span></label></header>
+<div class="ans"><ul class="alist"><li>No array: the Effect runs after every committed render.</li><li><code>[]</code>: the Effect does not re-run due to reactive dependency changes (though Strict Mode adds a development check).</li><li><code>[userId]</code>: the Effect re-runs when <code>userId</code> changes.</li><li>Rule of thumb: include all reactive values used by the Effect.</li></ul></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q22">
+<header><span class="num">22</span><h3>What is the cleanup function in useEffect?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="22"><span>I can explain this</span></label></header>
+<div class="ans"><p>Cleanup removes or reverses something established by an Effect, such as a subscription, timer, or event listener.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>useEffect(() =&gt; {
+  const id = setInterval(() =&gt; {
+    console.log("Running");
+  }, 1000);
+
+  return () =&gt; clearInterval(id);
+}, []);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q23">
+<header><span class="num">23</span><h3>What is useRef?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="23"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useRef</code> stores a value between renders without triggering a re-render when that value changes. It is also used to access DOM elements.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const inputRef = useRef(null);
+
+&lt;input ref={inputRef} /&gt;
+&lt;button onClick={() =&gt; inputRef.current?.focus()}&gt;
+  Focus
+&lt;/button&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q24">
+<header><span class="num">24</span><h3>What is useMemo?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="24"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useMemo</code> caches the result of a calculation between renders while its dependencies remain unchanged. Use it when profiling or the calculation justifies it, not automatically everywhere.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const filteredUsers = useMemo(
+  () =&gt; users.filter(user =&gt; user.active),
+  [users]
+);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q25">
+<header><span class="num">25</span><h3>What is useCallback?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="25"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useCallback</code> caches a function definition between renders while its dependencies remain unchanged. It is useful when stable function identity matters, such as passing callbacks to memoized children.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const handleSave = useCallback(() =&gt; {
+  saveUser(userId);
+}, [userId]);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q26">
+<header><span class="num">26</span><h3>What is useContext?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="26"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useContext</code> reads a value from a React context, allowing components to access shared data without passing props through every intermediate component.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const theme = useContext(ThemeContext);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q27">
+<header><span class="num">27</span><h3>What are the Rules of Hooks?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="27"><span>I can explain this</span></label></header>
+<div class="ans"><p>Call Hooks at the top level of a function component or custom Hook, not inside loops, conditions, or nested functions. Call Hooks only from React function components or custom Hooks. These rules help React associate Hook state with the correct component.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s4"><div class="sec-head"><h2>4. State Management &amp; Communication</h2><span class="sec-count">Q28–34</span></div><article class="q" id="q28">
+<header><span class="num">28</span><h3>What is lifting state up?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="28"><span>I can explain this</span></label></header>
+<div class="ans"><p>Lifting state up means moving shared state into the nearest common parent of the components that need it. The parent passes data and update callbacks to its children.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q29">
+<header><span class="num">29</span><h3>What is prop drilling? How can you avoid it?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="29"><span>I can explain this</span></label></header>
+<div class="ans"><p>Prop drilling means passing props through multiple intermediate components just to reach a deeply nested child. Context, component composition, or a state-management library can help.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q30">
+<header><span class="num">30</span><h3>What is the Context API?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="30"><span>I can explain this</span></label></header>
+<div class="ans"><p>Context lets a parent provide a value to components below it without passing that value through every level. Common use cases include themes, locale settings, and authentication information. Frequently changing context values can cause consumers to re-render.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q31">
+<header><span class="num">31</span><h3>What is Redux?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="31"><span>I can explain this</span></label></header>
+<div class="ans"><p>Redux is a predictable state-management library. It stores shared application state in a centralized store and updates that state through actions and reducers.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q32">
+<header><span class="num">32</span><h3>What is Redux Toolkit?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="32"><span>I can explain this</span></label></header>
+<div class="ans"><p>Redux Toolkit (RTK) is the recommended way to write Redux logic. It simplifies store configuration, reducer creation, immutable updates, and asynchronous workflows. Main APIs include <code>configureStore</code>, <code>createSlice</code>, and <code>createAsyncThunk</code>.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q33">
+<header><span class="num">33</span><h3>What is the difference between Context API and Redux?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="33"><span>I can explain this</span></label></header>
+<div class="ans"><p>Context distributes values through the component tree. Redux provides a structured state-management model with a store, reducers, actions, middleware, and development tools. Use Context for relatively simple shared values; consider Redux for complex shared-state workflows and debugging.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q34">
+<header><span class="num">34</span><h3>How do you update an object or array in React state?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="34"><span>I can explain this</span></label></header>
+<div class="ans"><p>Create a new object or array rather than mutating existing state directly.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>setUser(prev =&gt; ({
+  ...prev,
+  name: "Alex"
+}));
+
+setItems(prev =&gt; [...prev, newItem]);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s5"><div class="sec-head"><h2>5. APIs, Routing &amp; Error Handling</h2><span class="sec-count">Q35–40</span></div><article class="q" id="q35">
+<header><span class="num">35</span><h3>How do you call an API in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="35"><span>I can explain this</span></label></header>
+<div class="ans"><p>You can use <code>fetch</code> or Axios. An Effect is one option for fetching data when a component mounts or its dependencies change. In production, also handle loading, errors, cancellation or stale responses, and HTTP failures.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>useEffect(() =&gt; {
+  async function loadUsers() {
+    const response = await fetch("/api/users");
+    if (!response.ok) throw new Error("Request failed");
+    const data = await response.json();
+    setUsers(data);
+  }
+
+  loadUsers().catch(setError);
+}, []);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q36">
+<header><span class="num">36</span><h3>How do you handle loading and error states?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="36"><span>I can explain this</span></label></header>
+<div class="ans"><p>Maintain separate loading, data, and error states. Display a loader while waiting, the data on success, and an appropriate error message on failure.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>if (loading) return &lt;p&gt;Loading...&lt;/p&gt;;
+if (error) return &lt;p&gt;Something went wrong.&lt;/p&gt;;
+return &lt;UserList users={users} /&gt;;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q37">
+<header><span class="num">37</span><h3>What is React Router?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="37"><span>I can explain this</span></label></header>
+<div class="ans"><p>React Router is a routing library that connects URLs to UI components in a React application. It supports navigation, nested routes, route parameters, and layouts.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>&lt;Routes&gt;
+  &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+  &lt;Route path="/users" element={&lt;Users /&gt;} /&gt;
+  &lt;Route path="*" element={&lt;NotFound /&gt;} /&gt;
+&lt;/Routes&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q38">
+<header><span class="num">38</span><h3>What is the difference between Link and useNavigate?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="38"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>Link</code> creates a navigable link that users can click. <code>useNavigate</code> navigates programmatically, for example after a successful login or form submission.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q39">
+<header><span class="num">39</span><h3>What are protected routes?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="39"><span>I can explain this</span></label></header>
+<div class="ans"><p>Protected routes restrict access to pages based on authentication or authorization. The application checks the user's session or permissions and redirects or displays an access-denied page. The backend must enforce actual authorization.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q40">
+<header><span class="num">40</span><h3>What are Error Boundaries?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="40"><span>I can explain this</span></label></header>
+<div class="ans"><p>Error Boundaries catch certain errors thrown while rendering descendant components and show fallback UI. Traditional Error Boundaries use class components. They do not automatically catch errors in event handlers, asynchronous callbacks, or every server-side error.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s6"><div class="sec-head"><h2>6. Performance &amp; Advanced React</h2><span class="sec-count">Q41–47</span></div><article class="q" id="q41">
+<header><span class="num">41</span><h3>What causes a React component to re-render?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="41"><span>I can explain this</span></label></header>
+<div class="ans"><p>Common causes include changes to its state, new props from its parent, and updates to context it consumes. A parent re-render can also cause child components to render again. A re-render does not necessarily mean React modifies the actual DOM.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q42">
+<header><span class="num">42</span><h3>What is React.memo?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="42"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>React.memo</code> can skip re-rendering a function component when its props are unchanged according to a shallow comparison. It is most useful when rendering is expensive and props are often unchanged.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const UserCard = React.memo(function UserCard({ name }) {
+  return &lt;div&gt;{name}&lt;/div&gt;;
+});</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q43">
+<header><span class="num">43</span><h3>What is reconciliation in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="43"><span>I can explain this</span></label></header>
+<div class="ans"><p>Reconciliation is the process React uses to compare the previous and next UI descriptions and determine how to update the rendered result. Component types, tree position, and keys help React decide which elements and state to preserve.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q44">
+<header><span class="num">44</span><h3>What is code splitting and lazy loading?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="44"><span>I can explain this</span></label></header>
+<div class="ans"><p>Code splitting divides application code into smaller bundles. Lazy loading loads a component's code only when needed, which can reduce the initial JavaScript payload.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const Reports = React.lazy(() =&gt; import("./Reports"));
+
+// Render &lt;Reports /&gt; inside &lt;Suspense fallback={...}&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q45">
+<header><span class="num">45</span><h3>What is useReducer?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="45"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useReducer</code> manages state through a reducer function that receives current state and an action, then returns the next state. It is useful when state transitions are complex or related.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function reducer(state, action) {
+  if (action.type === "increment") {
+    return { count: state.count + 1 };
+  }
+  return state;
+}
+
+const [state, dispatch] = useReducer(reducer, { count: 0 });</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q46">
+<header><span class="num">46</span><h3>What are custom Hooks?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="46"><span>I can explain this</span></label></header>
+<div class="ans"><p>Custom Hooks are JavaScript functions whose names start with <code>use</code> and that can call other Hooks. They let you reuse stateful logic across components. They share logic, not automatically the same state instance.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function useToggle(initialValue = false) {
+  const [value, setValue] = useState(initialValue);
+  const toggle = () =&gt; setValue(v =&gt; !v);
+  return [value, toggle];
+}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q47">
+<header><span class="num">47</span><h3>What is the difference between CSR, SSR and SSG?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="47"><span>I can explain this</span></label></header>
+<div class="ans"><ul class="alist"><li>CSR (Client-Side Rendering): JavaScript in the browser renders the UI.</li><li>SSR (Server-Side Rendering): the server generates HTML for a request.</li><li>SSG (Static Site Generation): HTML is generated ahead of time.</li><li>Frameworks such as Next.js support these approaches.</li></ul></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s7"><div class="sec-head"><h2>7. Testing, Security &amp; Real-World Scenarios</h2><span class="sec-count">Q48–50</span></div><article class="q" id="q48">
+<header><span class="num">48</span><h3>How do you test React components?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="48"><span>I can explain this</span></label></header>
+<div class="ans"><p>React components can be tested with tools such as Vitest or Jest and React Testing Library. Test what users can see and do, such as rendering text, typing into inputs, clicking buttons, and displaying errors.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>expect(
+  screen.getByRole("button", { name: "Save" })
+).toBeInTheDocument();</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q49">
+<header><span class="num">49</span><h3>How do you prevent security issues in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="49"><span>I can explain this</span></label></header>
+<div class="ans"><p>Avoid rendering untrusted HTML with <code>dangerouslySetInnerHTML</code>; validate and sanitize untrusted data where appropriate; never expose API secrets in frontend code; enforce authentication and authorization on the backend; and use secure session and token-handling practices. JSX escapes text by default, but not every form of HTML injection is safe.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q50">
+<header><span class="num">50</span><h3>How would you optimize a slow React application?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="50"><span>I can explain this</span></label></header>
+<div class="ans"><p>Profile first to find the bottleneck. Then consider preventing unnecessary re-renders, memoization when beneficial, pagination or virtualization for large lists, code splitting, avoiding redundant API calls, and optimizing images and JavaScript. Explain the problem, chosen solution, and how you measured improvement.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s8"><div class="sec-head"><h2>8. Core Concepts Often Asked</h2><span class="sec-count">Q51–60</span></div><article class="q" id="q51">
+<header><span class="num">51</span><h3>Is setState synchronous? What are batching and functional updates?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="51"><span>I can explain this</span></label></header>
+<div class="ans"><p>State updates are not applied immediately. React batches multiple updates in the same event (and, since React 18, in timeouts, promises and native handlers too) and re-renders once. The <code>state</code> variable keeps its old value for the rest of that render.</p><p>When the next value depends on the previous one, use the functional form so each update sees the latest state.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>// count is 0 in this render
+setCount(count + 1);
+setCount(count + 1); // final result: 1
+
+setCount(c =&gt; c + 1);
+setCount(c =&gt; c + 1); // final result: 2</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q52">
+<header><span class="num">52</span><h3>What is a Fragment in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="52"><span>I can explain this</span></label></header>
+<div class="ans"><p>A component must return a single parent. A Fragment groups children without adding an extra DOM node, which keeps the HTML clean (useful in tables and flex/grid layouts). Use <code>&lt;&gt;...&lt;/&gt;</code>, or <code>&lt;React.Fragment key=...&gt;</code> when you need a key.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>return (
+  &lt;&gt;
+    &lt;h1&gt;Title&lt;/h1&gt;
+    &lt;p&gt;Text&lt;/p&gt;
+  &lt;/&gt;
+);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q53">
+<header><span class="num">53</span><h3>What are synthetic events in React?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="53"><span>I can explain this</span></label></header>
+<div class="ans"><p>A SyntheticEvent is React's cross-browser wrapper around the native event. It has the same interface (<code>preventDefault</code>, <code>stopPropagation</code>, <code>target</code>) and behaves consistently across browsers. React attaches listeners at the root container and delegates events from there. Native event is available as <code>e.nativeEvent</code>.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q54">
+<header><span class="num">54</span><h3>What are class component lifecycle methods and their Hooks equivalents?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="54"><span>I can explain this</span></label></header>
+<div class="ans"><p>Lifecycle has three phases: mounting, updating and unmounting. Interviewers often ask for the mapping:</p><ul class="alist"><li><code>componentDidMount</code> → <code>useEffect(fn, [])</code></li><li><code>componentDidUpdate</code> → <code>useEffect(fn, [deps])</code></li><li><code>componentWillUnmount</code> → cleanup function returned from <code>useEffect</code></li><li><code>shouldComponentUpdate</code> → <code>React.memo</code></li><li><code>getDerivedStateFromError</code> / <code>componentDidCatch</code> → no Hook yet, so Error Boundaries still need a class</li></ul></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q55">
+<header><span class="num">55</span><h3>What is the difference between useEffect and useLayoutEffect?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="55"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>useEffect</code> runs after the browser has painted, so it does not block the screen. <code>useLayoutEffect</code> runs synchronously after DOM updates but before paint. Use it only when you must read layout (size, position) and update before the user sees anything, such as positioning a tooltip, to avoid flicker. Prefer <code>useEffect</code> by default because <code>useLayoutEffect</code> blocks painting.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q56">
+<header><span class="num">56</span><h3>Why does useEffect run twice in development? What is StrictMode?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="56"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>&lt;React.StrictMode&gt;</code> is a development-only tool. It renders components twice and, in React 18+, mounts, unmounts and re-mounts every effect once. This helps reveal impure rendering and missing cleanup functions (for example, a subscription or timer that is never cleared). It does not happen in production. The fix is a proper cleanup function, not removing StrictMode.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q57">
+<header><span class="num">57</span><h3>What is a stale closure in React Hooks?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="57"><span>I can explain this</span></label></header>
+<div class="ans"><p>Each render creates its own copy of props and state. A function created in an earlier render (inside <code>setInterval</code>, an event listener or an effect with missing dependencies) keeps seeing the old values.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>useEffect(() =&gt; {
+  const id = setInterval(() =&gt; {
+    setCount(c =&gt; c + 1); // functional update avoids the stale value
+  }, 1000);
+  return () =&gt; clearInterval(id);
+}, []);</code></pre></div><p>Fixes: use functional updates, list the correct dependencies (the ESLint <code>exhaustive-deps</code> rule helps), or keep the latest value in a <code>useRef</code>.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q58">
+<header><span class="num">58</span><h3>What are Higher-Order Components (HOC) and render props?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="58"><span>I can explain this</span></label></header>
+<div class="ans"><p>A HOC is a function that takes a component and returns a new component with extra behaviour, for example <code>withAuth(Dashboard)</code>. A render prop is a prop whose value is a function that returns JSX, used to share logic. Both patterns share reusable logic, but today custom Hooks are usually simpler and avoid wrapper nesting. HOCs still appear in older codebases and libraries (<code>connect</code>, <code>withRouter</code>).</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function withAuth(Component) {
+  return function Wrapped(props) {
+    const { user } = useAuth();
+    return user ? &lt;Component {...props} /&gt; : &lt;Login /&gt;;
+  };
+}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q59">
+<header><span class="num">59</span><h3>What are Portals?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="59"><span>I can explain this</span></label></header>
+<div class="ans"><p>A Portal renders children into a different DOM node outside the parent's DOM hierarchy while keeping them in the same React tree. It is used for modals, tooltips and dropdowns that must escape <code>overflow: hidden</code> or z-index problems. Events still bubble through the React tree, so context and event handling work as normal.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>import { createPortal } from "react-dom";
+
+function Modal({ children }) {
+  return createPortal(
+    &lt;div className="modal"&gt;{children}&lt;/div&gt;,
+    document.body
+  );
+}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q60">
+<header><span class="num">60</span><h3>What is the children prop? Composition vs inheritance?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="60"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>children</code> is a special prop containing whatever is placed between a component's opening and closing tags. React recommends composition over inheritance: build complex UI by combining small components and passing content through props and <code>children</code>, rather than extending component classes.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function Card({ title, children }) {
+  return (
+    &lt;section&gt;
+      &lt;h2&gt;{title}&lt;/h2&gt;
+      {children}
+    &lt;/section&gt;
+  );
+}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div><div class="sec" id="s9"><div class="sec-head"><h2>9. Modern React &amp; Practical Scenarios</h2><span class="sec-count">Q61–66</span></div><article class="q" id="q61">
+<header><span class="num">61</span><h3>How do you pass a ref to a child component?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="61"><span>I can explain this</span></label></header>
+<div class="ans"><p>In React 19, function components receive <code>ref</code> as a normal prop. In React 18 and earlier, you wrap the child with <code>forwardRef</code>. Use <code>useImperativeHandle</code> if you want to expose only a limited API (such as <code>focus()</code>) instead of the whole DOM node.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>// React 19
+function Input({ ref, ...props }) {
+  return &lt;input ref={ref} {...props} /&gt;;
+}
+
+// React 18
+const Input = forwardRef((props, ref) =&gt; (
+  &lt;input ref={ref} {...props} /&gt;
+));</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q62">
+<header><span class="num">62</span><h3>What is Suspense?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="62"><span>I can explain this</span></label></header>
+<div class="ans"><p><code>Suspense</code> lets you show a fallback UI while part of the tree is not ready yet. It is used with <code>React.lazy</code> for code splitting and with Suspense-enabled data sources (frameworks, TanStack Query's suspense mode, the <code>use</code> Hook). Plain <code>useEffect</code> fetching does not trigger Suspense.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>&lt;Suspense fallback={&lt;Spinner /&gt;}&gt;
+  &lt;Dashboard /&gt;
+&lt;/Suspense&gt;</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q63">
+<header><span class="num">63</span><h3>What is concurrent rendering? What are useTransition and useDeferredValue?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="63"><span>I can explain this</span></label></header>
+<div class="ans"><p>Since React 18, React can pause, resume or abandon a render to keep the UI responsive. You can mark updates as non-urgent so typing and clicking stay smooth.</p><ul class="alist"><li><code>useTransition</code> wraps a state update as low priority and gives an <code>isPending</code> flag.</li><li><code>useDeferredValue</code> gives a delayed copy of a value so an expensive child (such as a big filtered list) lags behind the input.</li></ul><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const [isPending, startTransition] = useTransition();
+
+function onChange(e) {
+  setText(e.target.value);              // urgent
+  startTransition(() =&gt; setQuery(e.target.value)); // can wait
+}</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q64">
+<header><span class="num">64</span><h3>What is new in React 18 and React 19?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="64"><span>I can explain this</span></label></header>
+<div class="ans"><p><b>React 18:</b> <code>createRoot</code>, automatic batching, concurrent features (<code>useTransition</code>, <code>useDeferredValue</code>), and streaming SSR with Suspense.</p><p><b>React 19:</b> Actions for forms and mutations (<code>useActionState</code>, <code>useFormStatus</code>, <code>useOptimistic</code>), the <code>use</code> API, <code>ref</code> as a prop, Server Components support, and built-in document metadata tags such as <code>&lt;title&gt;</code>.</p></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q65">
+<header><span class="num">65</span><h3>What is the difference between server state and client state? Why use React Query?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="65"><span>I can explain this</span></label></header>
+<div class="ans"><p>Client state belongs to the UI (modal open, form input, theme). Server state lives on the backend and can become outdated, so it needs caching, refetching, deduplication and error handling. Libraries like TanStack Query (React Query) or SWR handle this: caching, background refetch, retries, loading and error flags, pagination and cache invalidation after mutations. This avoids storing API data in Redux or hand-writing <code>useEffect</code> fetch logic.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>const { data, isLoading, error } = useQuery({
+  queryKey: ["users"],
+  queryFn: () =&gt; fetch("/api/users").then(r =&gt; r.json()),
+});</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article><article class="q" id="q66">
+<header><span class="num">66</span><h3>How do you implement a debounced search input?</h3><label class="done" title="Mark as learned"><input type="checkbox" data-q="66"><span>I can explain this</span></label></header>
+<div class="ans"><p>Debouncing waits until the user stops typing for a short time before running the expensive work (usually an API call). A reusable custom Hook is the standard answer, and a very common coding round question.</p><div class="code"><button class="copy" type="button" aria-label="Copy code">Copy</button><pre><code>function useDebounce(value, delay = 400) {
+  const [debounced, setDebounced] = useState(value);
+  useEffect(() =&gt; {
+    const id = setTimeout(() =&gt; setDebounced(value), delay);
+    return () =&gt; clearTimeout(id);
+  }, [value, delay]);
+  return debounced;
+}
+
+const debouncedQuery = useDebounce(query);
+useEffect(() =&gt; { fetchResults(debouncedQuery); }, [debouncedQuery]);</code></pre></div></div>
+<button class="reveal" type="button">Show answer</button>
+</article></div>
+
+  <section class="end">
+    <div>
+      <h2>Quick revision checklist</h2>
+      <p class="sub">Tick off each topic when you can explain it without looking at the answer.</p>
+      <ul class="checks"><li><label><input type="checkbox" data-c="0"><span><b>Q1–10</b> React fundamentals</span></label></li><li><label><input type="checkbox" data-c="1"><span><b>Q11–17</b> Rendering, events and lists</span></label></li><li><label><input type="checkbox" data-c="2"><span><b>Q18–27</b> Hooks</span></label></li><li><label><input type="checkbox" data-c="3"><span><b>Q28–34</b> State management and component communication</span></label></li><li><label><input type="checkbox" data-c="4"><span><b>Q35–40</b> API calls, routing and error handling</span></label></li><li><label><input type="checkbox" data-c="5"><span><b>Q41–47</b> Performance and advanced React</span></label></li><li><label><input type="checkbox" data-c="6"><span><b>Q48–50</b> Testing, security and real-world scenarios</span></label></li><li><label><input type="checkbox" data-c="7"><span><b>Q51–60</b> Core concepts: batching, lifecycle, StrictMode, HOC, Portals</span></label></li><li><label><input type="checkbox" data-c="8"><span><b>Q61–66</b> Modern React: refs, Suspense, transitions, React 18/19, React Query, debounce</span></label></li></ul>
+    </div>
+    <div>
+      <h2>Five coding tasks to practise next</h2>
+      <ol class="tasks"><li>Counter with increment and decrement.</li><li>Searchable user table with sorting and pagination.</li><li>API fetching with loading, success and error states.</li><li>Login form with validation and protected routes.</li><li>Dashboard with reusable components, Context or Redux Toolkit, and performance optimization.</li></ol>
+    </div>
+  </section>
+  <div class="senior"><b>Senior interview reminder:</b> Explain the problem, your technical decision, alternatives considered, and how you measured the outcome.</div>
+</div>
+</main>
+
+<footer>React Interview Questions and Answers</footer>
+<button id="totop" type="button" aria-label="Back to top">↑</button>
+<script>
+(function(){
+  var KEY='reactPlaybookProgress';
+  var root=document.documentElement;
+  function store(get,set){try{return get?localStorage.getItem(get):localStorage.setItem(set[0],set[1])}catch(e){return null}}
+
+  // theme
+  var saved=store('reactPlaybookTheme');
+  if(saved){root.setAttribute('data-theme',saved)}
+  var themeBtn=document.getElementById('theme');
+  function isDark(){var t=root.getAttribute('data-theme');return t?t==='dark':matchMedia('(prefers-color-scheme: dark)').matches}
+  function paintTheme(){themeBtn.textContent=isDark()?'Light':'Dark'}
+  themeBtn.onclick=function(){var n=isDark()?'light':'dark';root.setAttribute('data-theme',n);store(null,['reactPlaybookTheme',n]);paintTheme()};
+  paintTheme();
+
+  // progress per question
+  var done={};
+  try{done=JSON.parse(store(KEY)||'{}')}catch(e){done={}}
+  var boxes=[].slice.call(document.querySelectorAll('input[data-q]'));
+  function paint(){
+    var n=0;
+    boxes.forEach(function(b){var on=!!done[b.dataset.q];b.checked=on;b.closest('.q').classList.toggle('is-done',on);if(on)n++});
+    document.getElementById('pcount').textContent=n+' / '+boxes.length;
+    document.getElementById('pfill').style.width=(n/boxes.length*100)+'%';
+  }
+  boxes.forEach(function(b){b.onchange=function(){if(b.checked)done[b.dataset.q]=1;else delete done[b.dataset.q];store(null,[KEY,JSON.stringify(done)]);paint()}});
+  paint();
+
+  // checklist
+  var cdone={};
+  try{cdone=JSON.parse(store(KEY+'C')||'{}')}catch(e){}
+  [].forEach.call(document.querySelectorAll('input[data-c]'),function(c){
+    c.checked=!!cdone[c.dataset.c];
+    c.onchange=function(){if(c.checked)cdone[c.dataset.c]=1;else delete cdone[c.dataset.c];store(null,[KEY+'C',JSON.stringify(cdone)])};
+  });
+
+  // quiz mode
+  var modeBtn=document.getElementById('mode');
+  modeBtn.onclick=function(){
+    var on=document.body.classList.toggle('quiz');
+    modeBtn.classList.toggle('on',on);
+    modeBtn.textContent=on?'Quiz mode: on':'Quiz mode';
+    if(!on)[].forEach.call(document.querySelectorAll('.q.shown'),function(q){q.classList.remove('shown')});
+  };
+  [].forEach.call(document.querySelectorAll('.reveal'),function(b){b.onclick=function(){b.closest('.q').classList.add('shown')}});
+
+  // copy buttons
+  [].forEach.call(document.querySelectorAll('.copy'),function(b){
+    b.onclick=function(){
+      var t=b.parentNode.querySelector('code').textContent;
+      function ok(){b.textContent='Copied';setTimeout(function(){b.textContent='Copy'},1400)}
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(ok,function(){})}
+      else{var a=document.createElement('textarea');a.value=t;document.body.appendChild(a);a.select();try{document.execCommand('copy');ok()}catch(e){}a.remove()}
+    };
+  });
+
+  // scroll: progress bar + back-to-top
+  var bar=document.getElementById('bar'),top=document.getElementById('totop');
+  function onScroll(){
+    var h=document.documentElement.scrollHeight-innerHeight;
+    bar.style.width=(h>0?scrollY/h*100:0)+'%';
+    top.classList.toggle('show',scrollY>700);
+  }
+  addEventListener('scroll',onScroll,{passive:true});onScroll();
+  top.onclick=function(){scrollTo({top:0,behavior:'smooth'})};
+})();
+
+</script>
+</body>
+</html>
